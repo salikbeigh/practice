@@ -1,29 +1,36 @@
 import React, { useRef, useState } from "react";
 
 const App = () => {
-  const [todos, setTodos] = useState([]);
   const inputRef = useRef(null);
+  const [todos, setTodos] = useState([]);
   const [count, setCount] = useState(1);
 
   const add = () => {
-    setTodos([...todos, { text: inputRef.current.value, id: count }]);
-    inputRef.current.value = "";
+    setTodos([
+      ...todos,
+      { id: count, text: inputRef.current.value, display: "" },
+    ]);
     setCount(count + 1);
+    inputRef.current.value = "";
   };
   const deleteTodos = (id) => {
     setTodos(todos.filter((item) => item.id != id));
   };
+
   return (
-    <div>
-      <input ref={inputRef} type="text" />
+    <div className="">
+      <input className="border border-black" ref={inputRef} type="type" />
       <button onClick={add}>ADD</button>
       <div>
-        {todos.map((item) => {
+        {todos.map((item, index) => {
           return (
-            <li className="list-none" key={item.id}>
-              {item.id}:{item.text}{" "}
-              <button onClick={() => deleteTodos(item.id)}>⤬</button>
-            </li>
+            <ul key={index + 1}>
+              {" "}
+              <li className="list-none">
+                {index + 1} :{item.text}{" "}
+                <button onClick={() => deleteTodos(item.id)}>╳</button>
+              </li>
+            </ul>
           );
         })}
       </div>
