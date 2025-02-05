@@ -26,7 +26,7 @@ const App = () => {
           return (
             <li key={index} className="list-none">
               {item.id} {item.text}{" "}
-              <button onClick={() => deleteTodo(item.id)}>⛌</button>
+              <button onClick={() => deleteTodo(item.id)}>❌</button>
             </li>
           );
         })}
