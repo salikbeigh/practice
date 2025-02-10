@@ -1,33 +1,65 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 
-const App = () => {
-  const input = useRef(null);
+function App() {
   const [todos, setTodos] = useState([]);
-  const [count, setCount] = useState(1);
-  const add = () => {
-    setTodos([...todos, { text: input.current.value, id: count }]);
-    input.current.value = "";
-    setCount(count + 1);
+  const [inputValue, setInputValue] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (inputValue.trim() !== "") {
+      setTodos([
+        ...todos,
+        { id: Date.now(), text: inputValue, completed: false },
+      ]);
+      setInputValue("");
+    }
   };
-  const deleteTodos = (id) => {
-    setTodos(todos.filter((item) => item.id != id));
+
+  const toggleTodo = (id) => {
+    setTodos(
+      todos.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      )
+    );
   };
+
+  const deleteTodo = (id) => {
+    setTodos(todos.filter((todo) => todo.id !== id));
+  };
+
   return (
-    <div>
-      <input ref={input} className="border border-black" />
-      <button onClick={add}>ADD</button>
-      <div>
-        {todos.map((item, index) => {
-          return (
-            <li className="list-none" key={index}>
-              {index + 1}:{item.text}{" "}
-              <button onClick={() => deleteTodos(item.id)}>❌</button>{" "}
-            </li>
-          );
-        })}
-      </div>
+    <div className="App">
+      <h1>Todo App</h1>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder="Add a new todo"
+        />
+        <button type="submit">Add</button>
+      </form>
+      <ul>
+        {todos.map((todo) => (
+          <li key={todo.id}>
+            <input
+              type="checkbox"
+              checked={todo.completed}
+              onChange={() => toggleTodo(todo.id)}
+            />
+            <span
+              style={{
+                textDecoration: todo.completed ? "line-through" : "none",
+              }}
+            >
+              {todo.text}
+            </span>
+            <button onClick={() => deleteTodo(todo.id)}>Delete</button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
-};
+}
 
 export default App;
